@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="/resources/layui/css/layui.css"/>
+<script src="/resources/layui/layui.js"></script>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+    function ajaxSubmit(){
+        var last="";
+        $.ajax({
+            type:"get",
+            dataType:'json',
+            contentType:'application/json',
+            // url:"/renren-admin/saas/authenlog/selectByCondition",
+            url:"/renren-admin/saas/authenlog/selectBycompanyCode",
+            //关键语句：$('#myform').serialize()获得form表单的id，然后使用serialize()将其转为json格式。
+            data:{
+                // "jsonobj" : JSON.stringify({"operator" : $('#operator').val(),"setupDate":$('#setupDate').val()})
+                "jsonobj" : JSON.stringify({"companyCode" : $('#companyCode').val()})
+            },
+            success:function (result){
+                alert(result);
+            },
+            error:function(){
+                alert("ERROR");
+            }
+        })
+    }
+</script>
+<body>
+    输入经办人:<input id="operator" type="text">
+    输入成立时间:<input id="setupDate" type="date">
+    输入成立时间:<input id="companyCode" type="text">
+<input type="button" onclick="ajaxSubmit()">
+</body>
+</html>

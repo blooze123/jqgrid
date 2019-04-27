@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("saas:log:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("saas:log:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("saas:log:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">日志标题</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.title" placeholder="日志标题"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">请求地址</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.url" placeholder="请求地址"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">日志类型</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.logType" placeholder="日志类型"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">业务类型</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.businessType" placeholder="业务类型"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">操作日期</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.operationDate" placeholder="操作日期"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">响应时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.responseTime" placeholder="响应时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">响应次数</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.responseNumber" placeholder="响应次数"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">异常次数</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.exceptionNumber" placeholder="异常次数"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">企业ID</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.companyCode" placeholder="企业ID"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">企业名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.companyName" placeholder="企业名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">设备数量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.equipmentQuantity" placeholder="设备数量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">浏览器种类数量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.browserNumber" placeholder="浏览器种类数量"/>
+                        </div>
+                    </div>
+											                    <!--<div class="form-group">
+                        <div class="col-sm-2 control-label">日志的类型(0：前台日志  1：后台日志)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="log.type" placeholder="日志的类型(0：前台日志  1：后台日志)"/>
+                        </div>
+                    </div>-->
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/saas/log.js?_${.now?long}"></script>
+</body>
+</html>

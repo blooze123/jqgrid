@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.saas.dao.OnlineUserDao">
+
+    <!--获取所有的公司-->
+    <select id="getAllCompany" resultType="io.renren.modules.saas.entity.EntCompanyEntity">
+        select
+            company_id,
+            company_code,
+            name
+        from
+            ent_company
+    </select>
+
+    <!--获取公司总人数-->
+    <select id="getCompanyTotal" parameterType="int" resultType="java.lang.Integer">
+        select count(1) from sys_user_detail where company_id = #{_parameter} and post_status = 1
+    </select>
+
+    <!--获取公司异常用户数-->
+    <select id="getAbnormalUser" parameterType="int" resultType="java.lang.Integer">
+        select count(1) from sys_user_detail where company_id = #{_parameter} and post_status = 1 and login_times &lt; 2
+    </select>
+
+    <!--获取公司未注册用户数-->
+    <select id="getUnregisteredUser" parameterType="int" resultType="java.lang.Integer">
+        select count(1) from sys_user_detail a left join sys_user b on a.user_id = b.user_id where a.company_id = #{_parameter} and a.post_status = 1 and b.status = 0
+    </select>
+
+    <!--插入在线用户数据-->
+    <insert id="save" parameterType="io.renren.modules.saas.entity.OnlineUserEntity">
+        insert saas_online_user
+        (
+            create_date,
+            total,
+            online,
+            activity,
+            abnormal_user,
+            unregistered_user,
+            company_id
+        ) values (
+            #{createDate},
+            #{total},
+            #{online},
+            #{activity},
+            #{abnormalUser},
+            #{unregisteredUser},
+            #{company.companyId}
+        )
+    </insert>
+
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.saas.dao.AuthenLogDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.saas.entity.AuthenLogEntity" id="authenLogMap">
+        <result property="authenLogId" column="authen_log_id"/>
+        <result property="authenticator" column="authenticator"/>
+        <result property="authenTime" column="authen_time"/>
+        <result property="operator" column="operator"/>
+        <result property="operatorTime" column="operator_time"/>
+        <result property="operationType" column="operation_type"/>
+        <result property="remake" column="remake"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <resultMap type="io.renren.modules.saas.entity.EntAuthenticationEntity" id="entAuthenticationMap">
+        <result property="authenticationId" column="authentication_id"/>
+        <result property="corpCode" column="corp_code"/>
+        <result property="companyCode" column="company_code"/>
+        <result property="organizationCode" column="organization_code"/>
+        <result property="setupDate" column="setup_date"/>
+        <result property="registeredCapital" column="registered_capital"/>
+        <result property="legalEntity" column="legal_entity"/>
+        <result property="companyAddress" column="company_address"/>
+        <result property="companyState" column="company_state"/>
+        <result property="companyLicense" column="company_license"/>
+        <result property="state" column="state"></result>
+        <result property="companyName" column="name"></result>
+        <result property="authenticator" column="authenticator"></result>
+        <result property="authenTime" column="authen_time"></result>
+        <association property="authenEntity" javaType="io.renren.modules.saas.entity.AuthenEntity">
+            <result property="operator" column="operator"></result>
+            <result property="operatorTime" column="operator_time"></result>
+        </association>
+    </resultMap>
+
+    <select id="selectAll" resultMap="entAuthenticationMap">
+      select ea.company_code,c.name,ea.organization_code,ea.setup_date,ea.registered_capital,
+ea.legal_entity,ea.company_address,ea.company_state,ea.authenticator,ea.authen_time,
+ea.state,sa.operator,sa.operator_time from ent_authentication ea LEFT JOIN ent_company c
+on ea.company_code=c.company_code LEFT JOIN saas_authen sa on sa.company_code=ea.company_code
+    </select>
+
+    <select id="selectByCondition" parameterType="io.renren.modules.saas.entity.EntAuthenticationEntity" resultMap="entAuthenticationMap">
+        select ea.company_code,c.name,ea.organization_code,ea.setup_date,ea.registered_capital,
+ea.legal_entity,ea.company_address,ea.company_state,ea.authenticator,ea.authen_time,
+ea.state,sa.operator,sa.operator_time from ent_authentication ea LEFT JOIN ent_company c
+on ea.company_code=c.company_code LEFT JOIN saas_authen sa on sa.company_code=ea.company_code
+<include refid="AuthenticationCondition"></include>
+    </select>
+<sql id="AuthenticationCondition">
+  <where>
+      <if test="companyCode!=null and companyCode!=''">
+          ea.company_code=#{companyCode}
+      </if>
+      <if test="companyName!=null and companyName!=''">
+          c.name=#{companyName}
+      </if>
+      <if test="organizationCode!=null and organizationCode!=''">
+          ea.organization_code=#{organizationCode}
+      </if>
+      <if test="setupDate!=null and setupDate!=''">
+          ea.setup_date=#{setupDate}
+      </if>
+      <if test="registeredCapital!=null and registeredCapital!=''">
+          ea.registered_capital=#{registeredCapital}
+      </if>
+      <if test="legalEntity!=null and legalEntity!=''">
+          ea.legal_entity=#{legalEntity}
+      </if>
+      <if test="companyState!=null and companyState!=''">
+          ea.company_state=#{companyState}
+      </if>
+      <if test="authenticator!=null and authenticator!=''">
+          ea.authenticator=#{authenticator}
+      </if>
+      <if test="state!=null and state!=''">
+          ea.state=#{state}
+      </if>
+      <if test="authenEntity!=null">
+      <if test="authenEntity.operator!=null and authenEntity.operator!=''">
+          sa.operator=#{authenEntity.operator}
+      </if>
+      </if>
+  </where>
+</sql>
+
+    <select id="selectBycompanyCode" parameterType="io.renren.modules.saas.entity.EntAuthenticationEntity" resultMap="entAuthenticationMap">
+        select ea.company_code,c.name,ea.organization_code,ea.setup_date,ea.registered_capital,
+ea.legal_entity,ea.company_address,ea.company_state,ea.authenticator,ea.authen_time,
+ea.state,sa.operator,sa.operator_time from ent_authentication ea LEFT JOIN ent_company c
+on ea.company_code=c.company_code LEFT JOIN saas_authen sa on sa.company_code=ea.company_code
+ where ea.company_code=#{companyCode}
+    </select>
+
+    <select id="selectAuthenLog" parameterType="string" resultType="io.renren.modules.saas.entity.AuthenLogEntity">
+        select * from saas_authen_log where company_code=#{companyCode}
+    </select>
+
+</mapper>
